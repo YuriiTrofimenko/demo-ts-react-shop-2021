@@ -4,6 +4,7 @@ import './index.css'
 import App from './components/App'
 import {store, StoreContext} from './stores/Store'
 import './scss/style.scss'
+import './fontawesome'
 
 ReactDOM.render(
   <React.StrictMode>

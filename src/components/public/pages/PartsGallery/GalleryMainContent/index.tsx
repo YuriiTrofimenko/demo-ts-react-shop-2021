@@ -14,7 +14,7 @@ const GalleryMainContent: React.FC = observer(
                 <div id="products-list">
                     {
                         productStore.productList.map(
-                            product => <GalleryProductGridItem key={product.id} product={product}/>
+                            (product, idx) => <GalleryProductGridItem key={idx} product={product}/>
                         )
                     }
                 </div>
