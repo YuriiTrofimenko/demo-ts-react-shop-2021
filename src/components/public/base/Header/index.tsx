@@ -1,30 +1,43 @@
-import {observer} from 'mobx-react'
-import {useStore} from '../../../../stores/Store'
-
-const Header: React.FC = observer(() => {
+import { observer } from 'mobx-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useStore } from '../../../../stores/Store'
+import logo from '../../../../assets/logo/logo.svg'
+import routes from '../../../../routes'
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+const header: React.FC = observer(() => {
     const {productStore} = useStore()
     const mainTittle = (
         <div className="header__tittle">
             <h1>{productStore.sourceTotalCount} shoes were found</h1>
         </div>
     )
+    const navLinks = routes.map(route => (
+        <li key={route.path}>
+            <NavLink
+                to={route.path}
+                activeClassName="active"
+                exact
+            >
+                {route.name}
+            </NavLink>
+        </li>
+    ))
     return (
         <header className="header">
             <div className="container">
                 <div className="burger-menu" id="nav-burger">
                     <div className="burger__icon--close" id="burgerClose">
-                        <i className="fas fa-times"></i>
+                        {/* <i className="fas fa-times"></i> */}
+                        <FontAwesomeIcon icon={['fas', 'times']} />
                     </div>
                     <ul className="burger-menu__items">
-                        <li><a href="#">Main</a></li>
-                        <li><a href="#">Gallery</a></li>
-                        <li><a href="#">News</a></li>
-                        <li><a href="#">Profile</a></li>
+                        {navLinks}
                     </ul>
                 </div>
                 <div className="header__content">
                     <div className="logo">
-                        <img className="logo__img" src="assets/logo/logo.svg" alt=""/>
+                        <img className="logo__img" src={logo} alt="" />
                     </div>
                     <div className="burger-icon__wrap--open" id="burgerOpen">
                         <img
@@ -35,12 +48,7 @@ const Header: React.FC = observer(() => {
                     </div>
                     <nav>
                         <ul className="header__menu">
-                            <li>
-                                <a href="#">Main</a>
-                            </li>
-                            <li><a href="#">Gallery</a></li>
-                            <li><a href="#">News</a></li>
-                            <li><a href="#">Profile</a></li>
+                            {navLinks}
                         </ul>
                     </nav>
 
@@ -58,4 +66,4 @@ const Header: React.FC = observer(() => {
     )
 })
 
-export default Header
+export default header

@@ -1,14 +1,39 @@
 import { observer } from 'mobx-react'
+import { useLocation } from 'react-router-dom'
 import { useStore } from '../../../../../stores/Store'
 import {useEffect} from 'react'
 import GalleryProductGridItem from "../GalleryProductGridItem";
 const GalleryMainContent: React.FC = observer(
     () => {
         const {productStore} = useStore()
+        const location = useLocation()
         useEffect(() => {
-            productStore.fetchMore()
-            return () => {productStore.clear()}
-        }, [])
+            if (productStore.allowFetchProducts) {
+                productStore.allowFetchProducts = false
+                const windowUrl = window.location.search
+                const params = new URLSearchParams(windowUrl)
+                console.log(params.get('orderBy'), params.get('sortingDirection'))
+                const orderBy = params.get('orderBy') || 'id'
+                const sortingDirection = params.get('sortingDirection') || 'DESC'
+                if (orderBy !== productStore.prevFilter.orderBy
+                    || sortingDirection !== productStore.prevFilter.sortingDirection
+                ) {
+                    productStore.prevFilter.orderBy = orderBy
+                    productStore.prevFilter.sortingDirection = sortingDirection
+                    if (orderBy) {
+                        productStore.filter.orderBy = orderBy
+                    }
+                    if (sortingDirection) {
+                        productStore.filter.sortingDirection = sortingDirection
+                    }
+                    productStore.clear()
+                    productStore.fetchMore()
+                }
+            }
+            return () => {
+                productStore.clear()
+            }
+        }, [location])
         return (
             <>
                 <div id="products-list">
