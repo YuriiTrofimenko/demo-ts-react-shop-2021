@@ -8,15 +8,17 @@ const GalleryMainContent: React.FC = observer(
         const {productStore} = useStore()
         const location = useLocation()
         useEffect(() => {
+            console.log('useEffect')
+            console.log('allowFetchProducts', productStore.allowFetchProducts)
             if (productStore.allowFetchProducts) {
                 productStore.allowFetchProducts = false
                 const windowUrl = window.location.search
                 const params = new URLSearchParams(windowUrl)
-                console.log(params.get('orderBy'), params.get('sortingDirection'))
                 const orderBy = params.get('orderBy') || 'id'
                 const sortingDirection = params.get('sortingDirection') || 'DESC'
                 if (orderBy !== productStore.prevFilter.orderBy
                     || sortingDirection !== productStore.prevFilter.sortingDirection
+                    || (!params.get('orderBy') && !params.get('sortingDirection'))
                 ) {
                     productStore.prevFilter.orderBy = orderBy
                     productStore.prevFilter.sortingDirection = sortingDirection
@@ -28,6 +30,8 @@ const GalleryMainContent: React.FC = observer(
                     }
                     productStore.clear()
                     productStore.fetchMore()
+                } else {
+                    productStore.allowFetchProducts = true
                 }
             }
             return () => {
