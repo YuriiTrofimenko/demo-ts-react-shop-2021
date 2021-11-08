@@ -8,8 +8,6 @@ const GalleryMainContent: React.FC = observer(
         const {productStore} = useStore()
         const location = useLocation()
         useEffect(() => {
-            console.log('useEffect')
-            console.log('allowFetchProducts', productStore.allowFetchProducts)
             if (productStore.allowFetchProducts) {
                 productStore.allowFetchProducts = false
                 const windowUrl = window.location.search
